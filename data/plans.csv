@@ -1,0 +1,13 @@
+plan_id,plan_name,plan_type,sum_insured,base_premium_inr,min_entry_age,max_entry_age,copay_pct,deductible_inr,room_rent_capped,ped_wait_years,ped_premium_loading_pct,cardiac_sublimit_inr,opd_cover_inr,description
+P01,Basic Saver 3L,base,300000,5500,18,65,20,0,1,4,0,,0,Low premium; 20% co-pay; room rent capped; 4-year wait on pre-existing diseases
+P02,Basic Saver 5L,base,500000,7500,18,65,20,0,1,4,0,,0,Low premium; 20% co-pay; room rent capped; 4-year wait on pre-existing diseases
+P03,Standard Care 5L,base,500000,9500,18,65,0,0,0,3,0,,0,No co-pay; no room rent cap; 3-year pre-existing disease wait
+P04,Standard Care 10L,base,1000000,12500,18,65,0,0,0,3,0,,0,No co-pay; no room rent cap; 3-year pre-existing disease wait
+P05,Comprehensive 10L,base,1000000,15500,18,65,0,0,0,2,0,,5000,2-year pre-existing disease wait; OPD cover Rs 5000
+P06,Comprehensive 25L,base,2500000,20500,18,65,0,0,0,2,0,,10000,High cover; 2-year pre-existing disease wait; OPD cover Rs 10000
+P07,Chronic Care 5L,chronic,500000,14000,18,65,10,0,0,0,25,,8000,Covers declared diabetes/BP from day 1; 25% premium loading if pre-existing; 10% co-pay
+P08,Chronic Care 10L,chronic,1000000,18000,18,65,10,0,0,0,25,,12000,Covers declared diabetes/BP from day 1; 25% premium loading if pre-existing; 10% co-pay
+P09,Young Shield 10L,base,1000000,8500,18,45,0,0,0,3,0,200000,0,Cheap for under-45s; cardiac treatment sub-limited to Rs 2L; 3-year pre-existing disease wait
+P10,Senior Secure 5L,senior,500000,16000,60,80,20,0,1,1,0,,0,For 60+; 1-year pre-existing disease wait; 20% co-pay; room rent capped
+P11,Super Top-Up 10L (3L deductible),topup,1000000,2500,18,65,0,300000,0,3,0,,0,Pays only after Rs 3L of annual bills; pair with a base plan or employer cover
+P12,Premium Elite 50L,base,5000000,26000,18,65,0,0,0,1,0,,20000,Very high cover; 1-year pre-existing disease wait; OPD cover Rs 20000

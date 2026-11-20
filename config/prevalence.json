@@ -1,0 +1,11 @@
+{
+  "_description": "Indian adult prevalence targets used to shift US-trained (BRFSS) model probabilities to Indian base rates (logit shift). null = no adjustment (no suitable Indian figure configured).",
+  "_source": "ICMR-INDIAB-17, Anjana RM et al., Lancet Diabetes & Endocrinology, Vol 11, July 2023 (n = 113,043 adults aged 20+). Weighted prevalence: diabetes 11.4%, prediabetes 15.3%, hypertension 35.5%, hypercholesterolaemia 24.0%.",
+  "_caveat": "ICMR-INDIAB measures conditions biochemically/clinically (including undiagnosed cases); BRFSS targets are self-reported diagnoses. After adjustment, probabilities mean 'likely to have the condition', diagnosed or not.",
+  "diabetes": 0.267,
+  "high_bp": 0.355,
+  "high_chol": 0.24,
+  "heart_disease": null,
+  "stroke": null,
+  "kidney_disease": null
+}

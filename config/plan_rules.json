@@ -1,0 +1,10 @@
+{
+  "_description": "Pricing and claim rules applied to data/plans.csv. Plans in data/plans.csv are SAMPLE plans with typical Indian policy structures, not real products. Replace with real plans (from insurer brochures / policy wordings) for production use.",
+  "premium_age_factors": [[18, 35, 1.0], [36, 45, 1.35], [46, 55, 2.0], [56, 60, 2.8], [61, 65, 3.5], [66, 70, 4.2], [71, 120, 5.0]],
+  "senior_plan_age_factors": [[60, 65, 1.0], [66, 70, 1.2], [71, 120, 1.45]],
+  "smoker_premium_loading_pct": 10,
+  "room_rent_cap_proportionate_deduction_pct": 12,
+  "_room_rent_note": "When room rent is capped and the patient uses a costlier room, insurers deduct proportionately from most of the bill. Modelled as a flat % reduction of each claim (assumption).",
+  "gst_pct": 0,
+  "_gst_note": "Individual health insurance premiums were made GST-exempt in India from 22 Sep 2025 (earlier 18%). Verify current rules before use."
+}

@@ -1,0 +1,20 @@
+{
+  "_description": "Annual hospitalisation and outpatient cost assumptions per condition, in INR. Used by the Monte Carlo plan simulator.",
+  "_status": "ILLUSTRATIVE ASSUMPTIONS. These are order-of-magnitude placeholders chosen to make the system work end to end. Before final submission, replace every value with a cited Indian figure (e.g. NSS 75th round 'Health in India' hospitalisation expenditure, AB-PMJAY health benefit package rates, insurer/IRDAI claim reports, published cost-of-illness studies) and record the source in the 'source' field.",
+  "cost_model": "Hospitalisation cost per event ~ LogNormal(mean = hosp_cost_mean_inr, sigma = hosp_cost_sigma). At most one hospitalisation per condition per year.",
+  "baseline": {
+    "_note": "Hospitalisations not tied to the modelled conditions (accidents, infections, surgery, etc.). Probability per year by age.",
+    "annual_hosp_prob_by_age": [[0, 29, 0.03], [30, 44, 0.04], [45, 59, 0.06], [60, 120, 0.10]],
+    "hosp_cost_mean_inr": 50000,
+    "hosp_cost_sigma": 0.9,
+    "source": "TODO"
+  },
+  "conditions": {
+    "diabetes":       {"annual_hosp_prob": 0.08, "hosp_cost_mean_inr": 60000,  "hosp_cost_sigma": 0.8, "annual_opd_cost_inr": 15000, "cardiac": false, "source": "TODO"},
+    "high_bp":        {"annual_hosp_prob": 0.05, "hosp_cost_mean_inr": 50000,  "hosp_cost_sigma": 0.8, "annual_opd_cost_inr": 6000,  "cardiac": false, "source": "TODO"},
+    "high_chol":      {"annual_hosp_prob": 0.02, "hosp_cost_mean_inr": 50000,  "hosp_cost_sigma": 0.8, "annual_opd_cost_inr": 6000,  "cardiac": false, "source": "TODO"},
+    "heart_disease":  {"annual_hosp_prob": 0.20, "hosp_cost_mean_inr": 250000, "hosp_cost_sigma": 0.7, "annual_opd_cost_inr": 20000, "cardiac": true,  "source": "TODO"},
+    "stroke":         {"annual_hosp_prob": 0.15, "hosp_cost_mean_inr": 200000, "hosp_cost_sigma": 0.7, "annual_opd_cost_inr": 25000, "cardiac": false, "source": "TODO"},
+    "kidney_disease": {"annual_hosp_prob": 0.25, "hosp_cost_mean_inr": 150000, "hosp_cost_sigma": 0.8, "annual_opd_cost_inr": 40000, "cardiac": false, "source": "TODO"}
+  }
+}

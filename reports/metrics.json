@@ -1,0 +1,488 @@
+{
+  "diabetes": {
+    "condition": "diabetes",
+    "label": "Diabetes or prediabetes",
+    "dataset": "brfss2015",
+    "target": "Diabetes_binary",
+    "features": [
+      "HighBP",
+      "HighChol",
+      "BMI",
+      "Smoker",
+      "Stroke",
+      "HeartDiseaseorAttack",
+      "PhysActivity",
+      "Fruits",
+      "Veggies",
+      "HvyAlcoholConsump",
+      "GenHlth",
+      "MentHlth",
+      "PhysHlth",
+      "DiffWalk",
+      "Sex",
+      "Age"
+    ],
+    "n_train": 202944,
+    "n_test": 50736,
+    "positive_rate_train": 0.1393,
+    "cv_auc_candidates": {
+      "logistic_regression": 0.8195,
+      "gradient_boosting": 0.8249
+    },
+    "selected_model": "gradient_boosting",
+    "test_roc_auc": 0.8243,
+    "test_pr_auc": 0.4203,
+    "test_brier_calibrated": 0.0978,
+    "test_brier_uncalibrated": 0.0979,
+    "brier_no_skill": 0.1199,
+    "calibration_table": [
+      {
+        "mean_predicted": 0.0033,
+        "observed_rate": 0.0033
+      },
+      {
+        "mean_predicted": 0.0096,
+        "observed_rate": 0.0105
+      },
+      {
+        "mean_predicted": 0.0204,
+        "observed_rate": 0.0245
+      },
+      {
+        "mean_predicted": 0.0394,
+        "observed_rate": 0.0392
+      },
+      {
+        "mean_predicted": 0.0642,
+        "observed_rate": 0.0667
+      },
+      {
+        "mean_predicted": 0.1037,
+        "observed_rate": 0.1005
+      },
+      {
+        "mean_predicted": 0.1492,
+        "observed_rate": 0.1467
+      },
+      {
+        "mean_predicted": 0.2133,
+        "observed_rate": 0.2185
+      },
+      {
+        "mean_predicted": 0.3083,
+        "observed_rate": 0.3163
+      },
+      {
+        "mean_predicted": 0.4866,
+        "observed_rate": 0.4703
+      }
+    ],
+    "mean_predicted_probability": 0.139404518211109,
+    "train_seconds": 12.2
+  },
+  "high_bp": {
+    "condition": "high_bp",
+    "label": "High blood pressure",
+    "dataset": "brfss2015",
+    "target": "HighBP",
+    "features": [
+      "HighChol",
+      "Diabetes_binary",
+      "BMI",
+      "Smoker",
+      "Stroke",
+      "HeartDiseaseorAttack",
+      "PhysActivity",
+      "Fruits",
+      "Veggies",
+      "HvyAlcoholConsump",
+      "GenHlth",
+      "MentHlth",
+      "PhysHlth",
+      "DiffWalk",
+      "Sex",
+      "Age"
+    ],
+    "n_train": 202944,
+    "n_test": 50736,
+    "positive_rate_train": 0.429,
+    "cv_auc_candidates": {
+      "logistic_regression": 0.7974,
+      "gradient_boosting": 0.8011
+    },
+    "selected_model": "gradient_boosting",
+    "test_roc_auc": 0.8058,
+    "test_pr_auc": 0.7476,
+    "test_brier_calibrated": 0.1773,
+    "test_brier_uncalibrated": 0.1773,
+    "brier_no_skill": 0.245,
+    "calibration_table": [
+      {
+        "mean_predicted": 0.048,
+        "observed_rate": 0.0526
+      },
+      {
+        "mean_predicted": 0.1234,
+        "observed_rate": 0.1226
+      },
+      {
+        "mean_predicted": 0.2035,
+        "observed_rate": 0.195
+      },
+      {
+        "mean_predicted": 0.2903,
+        "observed_rate": 0.2905
+      },
+      {
+        "mean_predicted": 0.3734,
+        "observed_rate": 0.371
+      },
+      {
+        "mean_predicted": 0.4633,
+        "observed_rate": 0.4454
+      },
+      {
+        "mean_predicted": 0.5496,
+        "observed_rate": 0.5583
+      },
+      {
+        "mean_predicted": 0.6444,
+        "observed_rate": 0.6504
+      },
+      {
+        "mean_predicted": 0.7417,
+        "observed_rate": 0.7486
+      },
+      {
+        "mean_predicted": 0.8524,
+        "observed_rate": 0.8631
+      }
+    ],
+    "mean_predicted_probability": 0.4289265783486993,
+    "train_seconds": 12.3
+  },
+  "high_chol": {
+    "condition": "high_chol",
+    "label": "High cholesterol",
+    "dataset": "brfss2015",
+    "target": "HighChol",
+    "features": [
+      "HighBP",
+      "Diabetes_binary",
+      "BMI",
+      "Smoker",
+      "Stroke",
+      "HeartDiseaseorAttack",
+      "PhysActivity",
+      "Fruits",
+      "Veggies",
+      "HvyAlcoholConsump",
+      "GenHlth",
+      "MentHlth",
+      "PhysHlth",
+      "DiffWalk",
+      "Sex",
+      "Age"
+    ],
+    "n_train": 202944,
+    "n_test": 50736,
+    "positive_rate_train": 0.4241,
+    "cv_auc_candidates": {
+      "logistic_regression": 0.7275,
+      "gradient_boosting": 0.7375
+    },
+    "selected_model": "gradient_boosting",
+    "test_roc_auc": 0.7362,
+    "test_pr_auc": 0.6537,
+    "test_brier_calibrated": 0.2041,
+    "test_brier_uncalibrated": 0.2041,
+    "brier_no_skill": 0.2442,
+    "calibration_table": [
+      {
+        "mean_predicted": 0.094,
+        "observed_rate": 0.094
+      },
+      {
+        "mean_predicted": 0.1785,
+        "observed_rate": 0.1877
+      },
+      {
+        "mean_predicted": 0.2631,
+        "observed_rate": 0.2794
+      },
+      {
+        "mean_predicted": 0.3358,
+        "observed_rate": 0.3232
+      },
+      {
+        "mean_predicted": 0.3883,
+        "observed_rate": 0.3939
+      },
+      {
+        "mean_predicted": 0.4499,
+        "observed_rate": 0.4597
+      },
+      {
+        "mean_predicted": 0.5194,
+        "observed_rate": 0.5116
+      },
+      {
+        "mean_predicted": 0.5827,
+        "observed_rate": 0.5796
+      },
+      {
+        "mean_predicted": 0.6531,
+        "observed_rate": 0.6569
+      },
+      {
+        "mean_predicted": 0.7637,
+        "observed_rate": 0.7607
+      }
+    ],
+    "mean_predicted_probability": 0.4237796266671597,
+    "train_seconds": 12.0
+  },
+  "heart_disease": {
+    "condition": "heart_disease",
+    "label": "Heart disease (CHD / heart attack)",
+    "dataset": "brfss2020",
+    "target": "HeartDisease",
+    "features": [
+      "BMI",
+      "Smoking",
+      "AlcoholDrinking",
+      "PhysicalHealth",
+      "MentalHealth",
+      "DiffWalking",
+      "Sex",
+      "AgeCategory",
+      "Diabetic",
+      "PhysicalActivity",
+      "GenHealth",
+      "SleepTime",
+      "Asthma",
+      "SkinCancer",
+      "Stroke",
+      "KidneyDisease"
+    ],
+    "n_train": 255836,
+    "n_test": 63959,
+    "positive_rate_train": 0.0856,
+    "cv_auc_candidates": {
+      "logistic_regression": 0.8415,
+      "gradient_boosting": 0.8398
+    },
+    "selected_model": "logistic_regression",
+    "test_roc_auc": 0.8363,
+    "test_pr_auc": 0.3444,
+    "test_brier_calibrated": 0.0657,
+    "test_brier_uncalibrated": 0.0658,
+    "brier_no_skill": 0.0783,
+    "calibration_table": [
+      {
+        "mean_predicted": 0.0039,
+        "observed_rate": 0.004
+      },
+      {
+        "mean_predicted": 0.0068,
+        "observed_rate": 0.0086
+      },
+      {
+        "mean_predicted": 0.0094,
+        "observed_rate": 0.0109
+      },
+      {
+        "mean_predicted": 0.0159,
+        "observed_rate": 0.0192
+      },
+      {
+        "mean_predicted": 0.028,
+        "observed_rate": 0.0293
+      },
+      {
+        "mean_predicted": 0.0457,
+        "observed_rate": 0.0446
+      },
+      {
+        "mean_predicted": 0.0781,
+        "observed_rate": 0.0782
+      },
+      {
+        "mean_predicted": 0.1213,
+        "observed_rate": 0.1216
+      },
+      {
+        "mean_predicted": 0.1953,
+        "observed_rate": 0.19
+      },
+      {
+        "mean_predicted": 0.3671,
+        "observed_rate": 0.3657
+      }
+    ],
+    "mean_predicted_probability": 0.08559932123065477,
+    "train_seconds": 4.1
+  },
+  "stroke": {
+    "condition": "stroke",
+    "label": "Stroke",
+    "dataset": "brfss2020",
+    "target": "Stroke",
+    "features": [
+      "BMI",
+      "Smoking",
+      "AlcoholDrinking",
+      "PhysicalHealth",
+      "MentalHealth",
+      "DiffWalking",
+      "Sex",
+      "AgeCategory",
+      "Diabetic",
+      "PhysicalActivity",
+      "GenHealth",
+      "SleepTime",
+      "Asthma",
+      "SkinCancer",
+      "HeartDisease",
+      "KidneyDisease"
+    ],
+    "n_train": 255836,
+    "n_test": 63959,
+    "positive_rate_train": 0.0377,
+    "cv_auc_candidates": {
+      "logistic_regression": 0.8195,
+      "gradient_boosting": 0.818
+    },
+    "selected_model": "logistic_regression",
+    "test_roc_auc": 0.8241,
+    "test_pr_auc": 0.1641,
+    "test_brier_calibrated": 0.0336,
+    "test_brier_uncalibrated": 0.0338,
+    "brier_no_skill": 0.0363,
+    "calibration_table": [
+      {
+        "mean_predicted": 0.0017,
+        "observed_rate": 0.0013
+      },
+      {
+        "mean_predicted": 0.0036,
+        "observed_rate": 0.004
+      },
+      {
+        "mean_predicted": 0.0055,
+        "observed_rate": 0.0051
+      },
+      {
+        "mean_predicted": 0.0083,
+        "observed_rate": 0.0086
+      },
+      {
+        "mean_predicted": 0.0128,
+        "observed_rate": 0.0123
+      },
+      {
+        "mean_predicted": 0.0214,
+        "observed_rate": 0.0201
+      },
+      {
+        "mean_predicted": 0.031,
+        "observed_rate": 0.0324
+      },
+      {
+        "mean_predicted": 0.0498,
+        "observed_rate": 0.0537
+      },
+      {
+        "mean_predicted": 0.0802,
+        "observed_rate": 0.0757
+      },
+      {
+        "mean_predicted": 0.1705,
+        "observed_rate": 0.17
+      }
+    ],
+    "mean_predicted_probability": 0.037779718008400694,
+    "train_seconds": 3.4
+  },
+  "kidney_disease": {
+    "condition": "kidney_disease",
+    "label": "Kidney disease",
+    "dataset": "brfss2020",
+    "target": "KidneyDisease",
+    "features": [
+      "BMI",
+      "Smoking",
+      "AlcoholDrinking",
+      "PhysicalHealth",
+      "MentalHealth",
+      "DiffWalking",
+      "Sex",
+      "AgeCategory",
+      "Diabetic",
+      "PhysicalActivity",
+      "GenHealth",
+      "SleepTime",
+      "Asthma",
+      "SkinCancer",
+      "HeartDisease",
+      "Stroke"
+    ],
+    "n_train": 255836,
+    "n_test": 63959,
+    "positive_rate_train": 0.0368,
+    "cv_auc_candidates": {
+      "logistic_regression": 0.8108,
+      "gradient_boosting": 0.8074
+    },
+    "selected_model": "logistic_regression",
+    "test_roc_auc": 0.8005,
+    "test_pr_auc": 0.1594,
+    "test_brier_calibrated": 0.033,
+    "test_brier_uncalibrated": 0.0331,
+    "brier_no_skill": 0.0355,
+    "calibration_table": [
+      {
+        "mean_predicted": 0.0037,
+        "observed_rate": 0.0048
+      },
+      {
+        "mean_predicted": 0.0059,
+        "observed_rate": 0.0061
+      },
+      {
+        "mean_predicted": 0.0073,
+        "observed_rate": 0.0096
+      },
+      {
+        "mean_predicted": 0.0093,
+        "observed_rate": 0.011
+      },
+      {
+        "mean_predicted": 0.0137,
+        "observed_rate": 0.0152
+      },
+      {
+        "mean_predicted": 0.0212,
+        "observed_rate": 0.0203
+      },
+      {
+        "mean_predicted": 0.0311,
+        "observed_rate": 0.0301
+      },
+      {
+        "mean_predicted": 0.0465,
+        "observed_rate": 0.0444
+      },
+      {
+        "mean_predicted": 0.0766,
+        "observed_rate": 0.0735
+      },
+      {
+        "mean_predicted": 0.1642,
+        "observed_rate": 0.1637
+      }
+    ],
+    "mean_predicted_probability": 0.03684506001422911,
+    "train_seconds": 3.1
+  }
+}
