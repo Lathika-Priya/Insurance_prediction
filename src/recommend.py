@@ -147,8 +147,28 @@ def explain(plan, ev, declared, probs, ped_labels):
     return reasons
 
 
-def recommend(q: dict, prefs: dict, n_sims: int = 20000) -> dict:
+def plan_risk_eligibility(plan, conditions):
+    """Apply a sample-plan matching rule, not a clinical risk classification."""
+    measure = getattr(plan, "risk_condition", "highest")
+    if measure == "highest":
+        probability = max(item["probability"] for item in conditions.values())
+        label = "Highest condition probability"
+    else:
+        probability = conditions[measure]["probability"]
+        label = conditions[measure]["label"]
+    # Model probabilities use four decimal places; percentage precision is two.
+    value = round(100 * probability, 2)
+    minimum = float(getattr(plan, "min_risk_pct", 0))
+    maximum = float(getattr(plan, "max_risk_pct", 100))
+    return {"measure": measure, "label": label, "assessed_pct": value,
+            "min_pct": minimum, "max_pct": maximum,
+            "eligible": minimum <= value <= maximum}
+
+
+def recommend(q: dict, prefs: dict, n_sims: int = 20000, plan_config=None) -> dict:
     cost, rules, plans = load_config()
+    if plan_config is not None:
+        rules, plans = plan_config
     risk = assess(q)
     conds = risk["conditions"]
     probs = {c: conds[c]["probability"] for c in ORDER}
@@ -168,6 +188,12 @@ def recommend(q: dict, prefs: dict, n_sims: int = 20000) -> dict:
     rows, excluded = [], []
     for plan in plans.itertuples():
         why_not = []
+        risk_match = plan_risk_eligibility(plan, conds)
+        if not risk_match["eligible"]:
+            why_not.append(
+                f"{risk_match['label']} {risk_match['assessed_pct']:g}% is outside "
+                f"this plan's allowed risk range {risk_match['min_pct']:g}-{risk_match['max_pct']:g}%"
+            )
         if not plan.min_entry_age <= age <= plan.max_entry_age:
             why_not.append(f"entry age {plan.min_entry_age}-{plan.max_entry_age}")
         if plan.sum_insured < min_si:
@@ -185,6 +211,7 @@ def recommend(q: dict, prefs: dict, n_sims: int = 20000) -> dict:
             "plan_id": plan.plan_id, "plan_name": plan.plan_name, "plan_type": plan.plan_type,
             "sum_insured": int(plan.sum_insured), "score": float(score), **ev,
             "description": plan.description,
+            "risk_eligibility": risk_match,
             "notes": explain(plan, ev, declared, probs, ped_labels),
         })
     rows.sort(key=lambda r: r["score"])

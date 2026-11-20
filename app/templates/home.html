@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#112f39">
+  <title>Home | Carewise</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/results.js" defer></script>
+  <script src="/static/home.js" defer></script>
+</head>
+<body class="dashboard-page">
+  <a class="skip-link" href="#home-content">Skip to content</a>
+  <header class="app-header">
+    <div class="header-inner">
+      <a class="brand" href="/home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 6v5.3c0 4.2 3.2 7.8 7.5 9.7 4.3-1.9 7.5-5.5 7.5-9.7V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.3 2.3 4.7-4.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>carewise<span class="brand-dot">.</span></span></a>
+      <a class="home-link" href="/home">Home</a><span class="header-divider"></span><span class="header-section">Health &amp; coverage</span>
+      <div class="account-area"><a class="account-profile-link" href="/profile" aria-label="Open your profile"><span class="avatar" id="user-avatar" aria-hidden="true">C</span><div class="account-details"><strong id="user-name">Your account</strong><span id="user-email"></span></div></a><button type="button" class="button ghost" id="logout-button">Sign out</button></div>
+    </div>
+  </header>
+  <main class="dashboard-main" id="home-content">
+    <section class="dashboard-intro">
+      <div><span class="eyebrow">YOUR HEALTH &amp; COVERAGE</span><h1>Welcome, <span id="welcome-name">there</span>.</h1><p id="home-subtitle">Your personal assessment, all in one place.</p></div>
+      <a class="button primary" id="retake-button" href="/assessment" hidden>Get a new assessment</a>
+    </section>
+    <div id="session-error" class="notice error-notice" role="alert" hidden></div>
+    <p id="home-loading" role="status">Loading your home page...</p>
+    <section id="first-assessment" class="empty-assessment" hidden>
+      <div class="empty-symbol" aria-hidden="true">&#10023;</div>
+      <span class="eyebrow">LET'S GET TO KNOW YOU</span>
+      <h2>Your first step to a clearer picture.</h2>
+      <p>Take a short health and lifestyle questionnaire to see your health profile and personalized sample insurance recommendations.</p>
+      <a class="button primary" id="start-assessment" href="/assessment">Get assessment</a>
+      <span class="muted">About 3–5 minutes &middot; Your results will appear here</span>
+    </section>
+    <section id="saved-assessment" hidden aria-label="Latest assessment">
+      <div class="saved-heading"><h2>Your latest assessment</h2><p id="completed-at" class="muted"></p></div>
+      <div class="home-summary">
+        <div class="summary-tile"><span>Recommended plan</span><strong id="best-plan"></strong></div>
+        <div class="summary-tile"><span>First-year premium</span><strong id="best-premium"></strong></div>
+        <div class="summary-tile"><span>Sum insured</span><strong id="best-cover"></strong></div>
+      </div>
+      <div id="out" class="results" tabindex="-1"></div>
+    </section>
+    <footer class="dashboard-footer"><span class="footer-brand">carewise.</span><p>Decision-support prototype for academic use. Plans are sample plans with typical Indian policy structures, not real products. Cost figures are illustrative assumptions. Not insurance or medical advice.</p></footer>
+    <noscript><p class="notice error-notice">Please enable JavaScript to view your assessment.</p></noscript>
+  </main>
+</body>
+</html>

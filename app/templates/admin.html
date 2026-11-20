@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#112f39">
+  <title>Admin | Carewise</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/manage.js" defer></script>
+  <script src="/static/admin.js" defer></script>
+</head>
+<body class="dashboard-page">
+  <a class="skip-link" href="#management-content">Skip to content</a>
+  <header class="app-header">
+    <div class="header-inner">
+      <a class="brand" data-account-home href="/home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 6v5.3c0 4.2 3.2 7.8 7.5 9.7 4.3-1.9 7.5-5.5 7.5-9.7V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.3 2.3 4.7-4.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>carewise<span class="brand-dot">.</span></span></a>
+      <a class="home-link" data-account-home href="/home">Home</a><span class="header-divider"></span><span class="header-section">Health &amp; coverage</span>
+      <div class="account-area"><a class="account-profile-link" href="/profile" aria-label="Open your profile"><span class="avatar" id="user-avatar" aria-hidden="true">C</span><div class="account-details"><strong id="user-name">Your account</strong><span id="user-email"></span></div></a><button type="button" class="button ghost" id="logout-button">Sign out</button></div>
+    </div>
+  </header>
+<main class="dashboard-main" id="management-content"><section class="dashboard-intro"><div><span class="eyebrow">ADMINISTRATION</span><h1>Manage your insurance catalogue.</h1><p>Update sample plans, pricing factors, and user accounts.</p></div></section>
+<div id="page-notice" class="notice" role="status" hidden></div>
+<div class="home-summary"><div class="summary-tile"><span>Active sample plans</span><strong id="count-plans">...</strong></div><div class="summary-tile"><span>User accounts</span><strong id="count-users">...</strong></div><div class="summary-tile"><span>Users with assessments</span><strong id="count-assessments">...</strong></div></div>
+<nav class="management-tabs" aria-label="Management sections">
+<button class="button primary" data-panel="plans-panel" aria-pressed="true">Insurance plans</button><button class="button secondary" data-panel="rules-panel" aria-pressed="false">Risk &amp; pricing</button><button class="button secondary" data-panel="users-panel" aria-pressed="false">User accounts</button></nav>
+<section id="plans-panel" class="card">
+<div class="saved-heading"><div><h2>Sample insurance plans</h2><p class="muted">Changes apply to new assessments. Inactive plans are excluded; saved results stay unchanged.</p></div><button class="button primary" id="add-plan" disabled>Add plan</button></div>
+<div class="table-scroll"><table><thead><tr><th>Plan</th><th>Type</th><th>Cover</th><th>Base premium</th><th>Risk eligibility</th><th>Status</th><th>Manage</th></tr></thead><tbody id="plans-body"></tbody></table></div></section>
+<section id="rules-panel" class="card" hidden><h2>Risk &amp; pricing factors</h2><p class="muted">These rules affect premium and claim calculations across plans. They do not change the health prediction models.</p>
+<form id="rules-form"><div class="grid" id="rule-fields"></div><h3 class="rule-heading">Standard plan age multipliers</h3><div id="standard-bands" class="age-bands"></div><h3 class="rule-heading">Senior plan age multipliers</h3><div id="senior-bands" class="age-bands"></div><p class="muted">Age ranges must be consecutive through age 120. Standard ranges start at 18; senior ranges start at 60.</p><button class="button primary" type="submit" disabled>Save pricing rules</button></form></section>
+<section id="users-panel" class="card" hidden><h2>User accounts</h2><p class="muted">Reset a user's password with your administrator password. Click your account name at the top right to change your own password.</p>
+<div class="field"><label for="user-search">Find an account</label><input id="user-search" type="search" placeholder="Search by name or email"></div>
+<div class="table-scroll"><table><thead><tr><th>Name &amp; email</th><th>Role</th><th>Joined</th><th>Assessment</th><th>Manage</th></tr></thead><tbody id="users-body"></tbody></table></div></section>
+<dialog id="plan-dialog" aria-labelledby="plan-title"><form id="plan-form"><div class="saved-heading"><h2 id="plan-title">Edit plan</h2><button class="button ghost" type="button" data-close="plan-dialog">Close</button></div><div id="plan-error" class="notice error-notice" role="alert" hidden></div><p class="muted plan-risk-help">Show this plan only when the selected assessed risk falls inside its minimum and maximum range (inclusive). Highest condition probability uses the largest of the six condition probabilities; a declared condition counts as 100%. These are sample-plan eligibility rules. Use 0-100% to accept every risk level.</p><div class="grid" id="plan-fields"></div><div class="form-actions"><button class="button secondary" type="button" data-close="plan-dialog">Cancel</button><button class="button primary" type="submit">Save plan</button></div></form></dialog>
+<dialog id="reset-dialog" aria-labelledby="reset-title"><form id="reset-form"><h2 id="reset-title">Reset user password</h2><p id="reset-target" class="muted"></p><div id="reset-error" class="notice error-notice" role="alert" hidden></div>
+<div class="field"><label for="admin-password">Your administrator password</label><input id="admin-password" name="admin_password" type="password" autocomplete="current-password" maxlength="128" required></div>
+<div class="field"><label for="reset-password">New user password</label><input id="reset-password" name="new_password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></div>
+<div class="field"><label for="reset-confirm">Confirm new user password</label><input id="reset-confirm" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></div>
+<p class="muted">The user will be signed out on every device. Share the new password with them privately.</p><div class="form-actions"><button type="button" class="button secondary" data-close="reset-dialog">Cancel</button><button class="button primary" type="submit">Reset password</button></div></form></dialog>    <footer class="dashboard-footer"><span class="footer-brand">carewise.</span><p>Decision-support prototype for academic use. Plans are sample plans with typical Indian policy structures, not real products. Cost figures are illustrative assumptions. Not insurance or medical advice.</p></footer>
+</main></body></html>

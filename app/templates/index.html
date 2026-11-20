@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#112f39">
+  <title>Your assessment | Carewise</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body class="dashboard-page">
+  <a class="skip-link" href="#assessment-form">Skip to assessment</a>
+  <header class="app-header">
+    <div class="header-inner">
+      <a class="brand" href="/home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 6v5.3c0 4.2 3.2 7.8 7.5 9.7 4.3-1.9 7.5-5.5 7.5-9.7V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.3 2.3 4.7-4.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>carewise<span class="brand-dot">.</span></span></a>
+      <a class="home-link" href="/home">Home</a><span class="header-divider"></span><span class="header-section">Health &amp; coverage</span>
+      <div class="account-area"><a class="account-profile-link" href="/profile" aria-label="Open your profile"><span class="avatar" id="user-avatar" aria-hidden="true">C</span><div class="account-details"><strong id="user-name">Your account</strong><span id="user-email"></span></div></a><button type="button" class="button ghost" id="logout-button">Sign out</button></div>
+    </div>
+  </header>
+  <main class="dashboard-main">
+    <section class="dashboard-intro">
+      <div><span class="eyebrow">A HEALTHIER PERSPECTIVE</span><h1>Good decisions start<br class="mobile-break"> with <span>understanding.</span></h1><p>A few details about you. A clearer view of your health and coverage.</p></div>
+      <span class="prototype-badge">Academic prototype</span>
+    </section>
+    <div id="session-error" class="notice error-notice" role="alert" hidden></div>
+    <div class="assessment-layout">
+      <aside class="assessment-sidebar" aria-label="Assessment progress">
+        <div class="sidebar-heading"><span class="eyebrow">YOUR ASSESSMENT</span><span id="step-count">Step 1 of 5</span></div>
+        <div class="progress-track" role="progressbar" aria-label="Assessment progress" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1"><span id="step-progress"></span></div>
+        <nav class="step-nav" aria-label="Questionnaire sections">
+          <button type="button" class="step-link active" data-goto="0" aria-label="About you" aria-current="step"><span class="step-number" aria-hidden="true">1</span><span>About you<small>The basics</small></span></button>
+          <button type="button" class="step-link" data-goto="1" aria-label="Your lifestyle" disabled><span class="step-number" aria-hidden="true">2</span><span>Your lifestyle<small>Everyday habits</small></span></button>
+          <button type="button" class="step-link" data-goto="2" aria-label="General health" disabled><span class="step-number" aria-hidden="true">3</span><span>General health<small>How you feel</small></span></button>
+          <button type="button" class="step-link" data-goto="3" aria-label="Medical history" disabled><span class="step-number" aria-hidden="true">4</span><span>Medical history<small>Known conditions</small></span></button>
+          <button type="button" class="step-link" data-goto="4" aria-label="Coverage preferences" disabled><span class="step-number" aria-hidden="true">5</span><span>Coverage preferences<small>What matters to you</small></span></button>
+        </nav>
+        <div class="sidebar-note"><span class="note-symbol" aria-hidden="true">&#10023;</span><h2>A little context goes a long way.</h2><p>Your answers help estimate health risks and compare sample insurance plans based on cost and protection.</p><span class="sidebar-note-footer">About 3–5 minutes to complete</span></div>
+      </aside>
+      <section class="questionnaire-card" id="assessment-form" aria-label="Health questionnaire">
+        <div class="questionnaire-topline"><span class="section-kicker">PERSONAL HEALTH PROFILE</span><span id="section-count">01 / 05</span></div>
+        <form id="f" novalidate>
+          <fieldset class="form-step" data-step="0"><legend>About you</legend><p class="step-description">Let's start with a few details about you.</p><div class="grid">
+    <label>Age<input name="age" type="number" required min="18" max="90" value="45"></label>
+    <label>Sex<select name="sex"><option value="male">Male</option><option value="female">Female</option></select></label>
+    <label>Height (cm)<input name="height_cm" step="0.1" type="number" required min="120" max="220" value="172"></label>
+    <label>Weight (kg)<input name="weight_kg" step="0.1" type="number" required min="30" max="250" value="80"></label>
+  </div></fieldset>
+          <fieldset class="form-step" data-step="1" hidden><legend>Your lifestyle</legend><p class="step-description">Everyday habits help build a more complete health profile.</p><div class="grid">
+    <label>Have you smoked at least 100 cigarettes in your entire life?<select name="smoked_100_cigarettes"><option value="false">No</option><option value="true">Yes</option></select></label>
+    <label>Heavy drinking?<select name="heavy_alcohol"><option value="false">No</option><option value="true">Yes</option></select><span class="field-hint">Men: more than 14 drinks/week. Women: more than 7.</span></label>
+    <label>Any exercise or physical activity in the past 30 days (outside your job)?<select name="physically_active"><option value="true">Yes</option><option value="false">No</option></select></label>
+    <label>Do you eat fruit at least once a day?<select name="fruit_daily"><option value="true">Yes</option><option value="false">No</option></select></label>
+    <label>Do you eat vegetables at least once a day?<select name="vegetables_daily"><option value="true">Yes</option><option value="false">No</option></select></label>
+    <label>Average sleep (hours per day)<input name="sleep_hours" type="number" required min="1" max="24" step="0.5" value="7"></label>
+  </div></fieldset>
+          <fieldset class="form-step" data-step="2" hidden><legend>General health</legend><p class="step-description">Tell us how you have been feeling over the past month.</p><div class="grid">
+    <label>In general, your health is<select name="general_health"><option value="1">Excellent</option><option value="2">Very good</option><option value="3" selected>Good</option><option value="4">Fair</option><option value="5">Poor</option></select></label>
+    <label>Days of poor physical health (illness/injury) in the past 30 days<input name="poor_physical_health_days" type="number" required min="0" max="30" value="0"></label>
+    <label>Days of poor mental health (stress, low mood) in the past 30 days<input name="poor_mental_health_days" type="number" required min="0" max="30" value="0"></label>
+    <label>Serious difficulty walking or climbing stairs?<select name="difficulty_walking"><option value="false">No</option><option value="true">Yes</option></select></label>
+  </div></fieldset>
+          <fieldset class="form-step" data-step="3" hidden><legend>Medical history</legend><p class="step-description">Select any conditions a doctor has diagnosed. Choose “Don't know” where available if you are unsure.</p><div class="grid">
+    <label>High blood pressure<select name="high_bp"><option value="no">No</option><option value="yes">Yes</option><option value="unknown">Don't know / never checked</option></select></label>
+    <label>High cholesterol<select name="high_chol"><option value="no">No</option><option value="yes">Yes</option><option value="unknown">Don't know / never checked</option></select></label>
+    <label>Diabetes<select name="diabetes"><option value="no">No</option><option value="yes">Yes</option><option value="borderline">Borderline / prediabetes</option><option value="unknown">Don't know / never checked</option></select></label>
+    <label>Heart disease or heart attack<select name="heart_disease"><option value="false">No</option><option value="true">Yes</option></select></label>
+    <label>Stroke<select name="stroke"><option value="false">No</option><option value="true">Yes</option></select></label>
+    <label>Kidney disease<select name="kidney_disease"><option value="false">No</option><option value="true">Yes</option></select></label>
+    <label>Asthma<select name="asthma"><option value="false">No</option><option value="true">Yes</option></select></label>
+    <label>Skin cancer<select name="skin_cancer"><option value="false">No</option><option value="true">Yes</option></select></label>
+  </div></fieldset>
+          <fieldset class="form-step" data-step="4" hidden><legend>Coverage preferences</legend><p class="step-description">Tell us what matters to you in an insurance plan.</p><div class="grid">
+    <label>Maximum annual premium (₹)<input name="annual_budget_inr" type="number" min="0" placeholder="No limit"></label>
+    <label>Minimum sum insured (₹)<input name="min_sum_insured_inr" type="number" required min="0" value="0"></label>
+    <label>Existing cover, e.g. employer (₹)<input name="existing_cover_inr" type="number" required min="0" value="0"></label>
+    <label>Priority<select name="risk_tolerance"><option value="low">Protection against big bills</option><option value="medium" selected>Balanced</option><option value="high">Lowest expected cost</option></select></label>
+    <label>Planning horizon (years)<input name="horizon_years" type="number" required min="1" max="10" value="5"></label>
+  </div></fieldset>
+          <div class="form-actions"><button type="button" class="button secondary" id="back-button" hidden>Back</button><span class="form-actions-spacer"></span><button type="button" class="button primary" id="next-button" disabled>Continue</button><button type="submit" class="button primary" id="go" hidden disabled>Get my recommendation</button></div>
+          <p id="status" class="form-status" role="status" aria-live="polite">Loading your account...</p>
+        </form>
+      </section>
+    </div>
+    <div id="out" class="results" aria-live="polite" tabindex="-1"></div>
+    <footer class="dashboard-footer"><span class="footer-brand">carewise.</span><p>Decision-support prototype for academic use. Plans are sample plans with typical Indian policy structures, not real products. Cost figures are illustrative assumptions. Not insurance or medical advice.</p></footer>
+    <noscript><p class="notice error-notice">Please enable JavaScript to complete the assessment.</p></noscript>
+  </main>
+</body>
+</html>

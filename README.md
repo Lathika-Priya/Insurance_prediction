@@ -17,7 +17,7 @@ Requires Python 3.10+.
 run.bat
 ```
 
-Then open http://127.0.0.1:8000.
+Then open http://127.0.0.1:8000. Create an account, or sign in with the email and password you registered. A successful registration or login opens the home page.
 
 Manual steps:
 
@@ -31,13 +31,41 @@ uvicorn app.main:app --reload   # web app on http://127.0.0.1:8000
 
 The included models were trained with scikit-learn 1.9. If loading fails on your version, run `python -m src.train` (`run.sh` does this automatically).
 
+## Accounts and frontend
+
+The app includes responsive sign-in and registration pages, a five-step health questionnaire, and styled recommendation results. Your name and email appear in the dashboard header. Use **Sign out** to revoke the current session.
+
+- There are no default or shared credentials. Create your own account at `/register`.
+- Passwords are salted and hashed with scrypt. Accounts and hashed session tokens are stored in `data/auth.sqlite3`, created automatically on startup and excluded from Git.
+- The default browser session expires on the server after 12 hours. **Keep me signed in** uses a seven-day cookie and server session.
+- Assessment pages and data APIs require authentication. Mutating authenticated requests also require an `X-CSRF-Token` header, returned by registration, login, and `GET /api/auth/me`.
+- The latest completed assessment result is saved per account in SQLite and displayed on the home page after login. New accounts see only the option to take their first assessment. Retaking the test replaces the previous result only after successful completion. Raw questionnaire answers are not stored; refreshing an unfinished questionnaire resets it.
+- Optional environment variables: `AUTH_DB_PATH` chooses the SQLite file; `COOKIE_SECURE=1` restricts cookies to HTTPS when deploying behind HTTPS. Leave it unset for local HTTP.
+- Email verification and password reset are not included.
+
+Run the authentication integration suite (uses an isolated temporary database and the real prediction API):
+
+```bash
+python -m unittest tests.test_auth -v
+```
+
+The browser smoke test uses Node 22+ and an installed Chrome or Edge browser (set `CHROME_PATH` if needed). It checks desktop/mobile layouts and the complete registration, assessment, and login flow using a temporary database:
+
+```bash
+node tests/browser_smoke.mjs
+```
+
+The frontend uses plain HTML, CSS, and JavaScript, served by FastAPI. No npm build or frontend server is needed.
+
 ## Project structure
 
 ```
 insurance-ai/
 ├── app/
 │   ├── main.py               FastAPI backend (POST /api/recommend, GET /api/plans, GET /api/model-performance)
-│   └── static/index.html     Questionnaire + results page (plain HTML/JS, no build step)
+│   ├── templates/            Login/registration and protected questionnaire pages
+│   ├── auth.py               SQLite accounts, scrypt passwords, sessions and CSRF
+│   └── static/               Shared CSS, JavaScript and favicon (no build step)
 ├── src/
 │   ├── features.py           Feature schema, questionnaire -> dataset encoding
 │   ├── validate_data.py      Checks datasets for real signal before training
@@ -129,8 +157,16 @@ The recommendations are only as good as these inputs. For example, with the curr
 
 ## API example
 
+First register (or use `/api/auth/login` for an existing account), keeping the session cookie:
+
 ```bash
-curl -X POST http://127.0.0.1:8000/api/recommend -H "Content-Type: application/json" -d '{
+curl -c cookies.txt http://127.0.0.1:8000/api/auth/register -H "Content-Type: application/json" -d '{"name":"Your Name","email":"you@example.com","password":"choose-your-own-long-password"}'
+```
+
+Copy the returned `csrf_token` into the next request. Treat the cookie file as a credential and remove it when finished.
+
+```bash
+curl -b cookies.txt -H "X-CSRF-Token: PASTE_RETURNED_CSRF_TOKEN" -X POST http://127.0.0.1:8000/api/recommend -H "Content-Type: application/json" -d '{
   "questionnaire": {"age": 45, "sex": "male", "height_cm": 172, "weight_kg": 88,
     "smoked_100_cigarettes": true, "heavy_alcohol": false, "physically_active": false,
     "fruit_daily": false, "vegetables_daily": true, "sleep_hours": 6, "general_health": 3,
@@ -142,3 +178,51 @@ curl -X POST http://127.0.0.1:8000/api/recommend -H "Content-Type: application/j
 ```
 
 Interactive API docs: http://127.0.0.1:8000/docs
+
+## Administrator and profile
+
+Create a separate administrator locally from the project directory:
+
+    python -m app.create_admin
+
+The command prompts for a name, separate email, and password (hidden as you type).
+It does not ship a default password or elevate existing user registrations.
+Open http://127.0.0.1:8000/admin/login and use those credentials.
+
+The admin dashboard supports adding/editing sample plans, marking plans inactive,
+editing age-based pricing multipliers, smoker loading, room-rent deductions and tax,
+and resetting user passwords after confirming the administrator password.
+Per-plan pre-existing disease loading, waiting periods, co-pay, deductible,
+coverage limits and outpatient cover can be edited in the plan form.
+At least one plan must remain active.
+
+Both roles have a Profile page with name, email, role, join date, latest assessment
+date, and password change. Administrators change their own password here.
+Password changes and resets revoke all sessions for that account. Administrators
+cannot reset another administrator through the user-reset endpoint.
+
+Managed plans and pricing rules are seeded from the CSV/JSON files once and then
+stored in the account SQLite database. Web assessments use the current managed
+catalogue without restarting the server. Saved assessments remain snapshots;
+users can take a new assessment to see updated pricing. Training and standalone
+model checks continue to use the original sample configuration files.
+Admin changes are recorded in the local admin_audit table without passwords.
+
+## Profile access and per-plan risk eligibility
+
+Click your account name/avatar at the top right to open your profile, on desktop
+or mobile. Separate Profile navigation buttons have been removed.
+
+Each plan's editor includes a risk measure and minimum/maximum allowed percentage.
+Choose one of the six modelled conditions or the highest of their probabilities.
+A plan is included only when the assessed value falls within its inclusive range,
+in addition to existing age, budget, coverage and top-up rules.
+Declared conditions count as 100%, matching the existing assessment representation.
+The highest condition probability is a matching measure, not a combined disease
+probability or clinical risk classification. These thresholds are configurable
+sample-plan rules, not validated underwriting criteria.
+
+Existing plans default to highest condition probability with a 0-100% range.
+Defaults are applied on read and persisted on the next edit.
+Excluded plans show a reason; eligible cards show their risk match.
+Saved assessments remain unchanged until the user takes a new assessment.

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#112f39">
+  <title>Sign in | Carewise</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/auth.js" defer></script>
+</head>
+<body class="auth-page">
+  <main class="auth-layout">
+    <section class="auth-story" aria-label="About Carewise">
+      <a class="brand brand-light" href="/"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 6v5.3c0 4.2 3.2 7.8 7.5 9.7 4.3-1.9 7.5-5.5 7.5-9.7V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.3 2.3 4.7-4.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>carewise<span class="brand-dot">.</span></span></a>
+      <div class="story-content">
+        <span class="eyebrow light">A LITTLE CLARITY. A LOT MORE CONFIDENCE.</span>
+        <h1>Your health. <br>Your future. <br><span>A clearer picture.</span></h1>
+        <p>Understand your health profile and explore insurance options that fit your life.</p>
+        <div class="health-illustration" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="illustration-shield"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 6v5.3c0 4.2 3.2 7.8 7.5 9.7 4.3-1.9 7.5-5.5 7.5-9.7V6L12 3Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12 2.3 2.3 4.7-4.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+          <div class="floating-note note-health"><span class="note-icon">+</span><span>Built around you<small>Your health, your priorities</small></span></div>
+          <div class="floating-note note-plan"><span class="note-icon check-icon">&#10003;</span><span>A more informed choice<small>Compare cost and protection</small></span></div>
+          <svg class="pulse-line" viewBox="0 0 400 100" fill="none"><path d="M0 55h85l18-22 24 44 28-65 28 80 24-37h193" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <div class="story-features"><span>Personal health insights</span><span>Transparent comparisons</span></div>
+      </div>
+      <p class="story-footer">AI Health Insurance Assessment <span>Academic project</span></p>
+    </section>
+    <section class="auth-panel">
+      <div class="auth-topline"><span id="switch-prompt">New to Carewise?</span> <a id="switch-link" href="/register">Create an account</a></div>
+      <div class="auth-form-wrap">
+        <span class="eyebrow">YOUR NEXT CHAPTER STARTS HERE</span>
+        <h2 id="auth-title">Welcome back.</h2>
+        <p class="auth-subtitle" id="auth-subtitle">Sign in to explore your health and coverage.</p>
+        <div class="auth-tabs" aria-label="Account access">
+          <a href="/login" id="login-tab" class="active" aria-current="page">Sign in</a>
+          <a href="/register" id="register-tab">Create account</a>
+        </div>
+        <div id="auth-notice" class="notice" role="status" hidden></div>
+        <form id="auth-form" method="post" action="/api/auth/login">
+          <div class="field" id="name-field" hidden>
+            <label for="full-name">Full name</label>
+            <input id="full-name" name="name" autocomplete="name" placeholder="Your full name" minlength="2" maxlength="80" disabled>
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="254" required>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="password-wrap"><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" maxlength="128" required><button class="password-toggle" type="button" data-password="password" aria-label="Show password" aria-pressed="false">Show</button></div>
+            <p class="field-hint" id="password-hint" hidden>Use at least 8 characters. A longer passphrase works well.</p>
+          </div>
+          <div class="field" id="confirm-field" hidden>
+            <label for="confirm-password">Confirm password</label>
+            <div class="password-wrap"><input id="confirm-password" type="password" autocomplete="new-password" placeholder="Enter your password again" maxlength="128" disabled><button class="password-toggle" type="button" data-password="confirm-password" aria-label="Show confirmation password" aria-pressed="false">Show</button></div>
+          </div>
+          <label class="checkbox-label"><input name="remember_me" type="checkbox"> Keep me signed in for 7 days</label>
+          <div id="auth-error" class="notice error-notice" role="alert" tabindex="-1" hidden></div>
+          <button class="button primary auth-submit" id="auth-submit" type="submit"><span id="submit-label">Sign in</span><span class="spinner" aria-hidden="true" hidden></span></button>
+        </form>
+        <p class="auth-security"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="4" y="8" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 8V5a3.5 3.5 0 0 1 7 0v3" stroke="currentColor" stroke-width="1.4"/></svg> A secure sign-in for your personal account.</p>
+        <noscript><p class="notice error-notice">Please enable JavaScript to sign in and use the assessment.</p></noscript>
+      </div>
+      <p class="auth-disclaimer"><a href="/admin/login">Administrator sign in</a><br>An academic decision-support tool. Sample plans and estimates are illustrative.</p>
+    </section>
+  </main>
+</body>
+</html>

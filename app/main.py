@@ -5,6 +5,8 @@ Run from the project root:
     uvicorn app.main:app --reload
 Then open http://127.0.0.1:8000
 """
+from contextlib import asynccontextmanager
+from datetime import datetime, timezone
 import json
 import sys
 from pathlib import Path
@@ -14,12 +16,15 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import pandas as pd  # noqa: E402
-from fastapi import FastAPI  # noqa: E402
-from fastapi.responses import FileResponse  # noqa: E402
+from fastapi import Depends, FastAPI, HTTPException, Request as HttpRequest  # noqa: E402
+from fastapi.responses import FileResponse, RedirectResponse  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
 from src.recommend import recommend  # noqa: E402
+from app.auth import database, current_session, init_db, require_csrf, require_user, router as auth_router  # noqa: E402
+
+from app.admin import init_catalog, prediction_catalog, catalog_snapshot, router as admin_router
 
 YesNoUnknown = Literal["yes", "no", "unknown"]
 
@@ -50,39 +55,137 @@ class Questionnaire(BaseModel):
 
 
 class Preferences(BaseModel):
-    annual_budget_inr: Optional[float] = None
-    min_sum_insured_inr: Optional[float] = 0
-    existing_cover_inr: Optional[float] = 0
+    annual_budget_inr: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
+    min_sum_insured_inr: Optional[float] = Field(default=0, ge=0, allow_inf_nan=False)
+    existing_cover_inr: Optional[float] = Field(default=0, ge=0, allow_inf_nan=False)
     risk_tolerance: Literal["low", "medium", "high"] = "medium"
     horizon_years: int = Field(default=5, ge=1, le=10)
 
 
 class Request(BaseModel):
     questionnaire: Questionnaire
-    preferences: Preferences = Preferences()
+    preferences: Preferences = Field(default_factory=Preferences)
 
 
-app = FastAPI(title="AI Health Insurance Assessment")
+@asynccontextmanager
+async def lifespan(app):
+    init_db()
+    init_catalog()
+    yield
+
+
+app = FastAPI(title="AI Health Insurance Assessment", lifespan=lifespan)
+app.include_router(auth_router)
+app.include_router(admin_router)
+
+
+@app.middleware("http")
+async def security_headers(request: HttpRequest, call_next):
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-store"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "same-origin"
+    response.headers["X-Frame-Options"] = "DENY"
+    # The generated API documentation includes its own CDN scripts.
+    if request.url.path not in ("/docs", "/redoc", "/docs/oauth2-redirect"):
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data:; object-src 'none'; base-uri 'self'; "
+            "form-action 'self'; frame-ancestors 'none'"
+        )
+    return response
+
+
+@app.get("/", include_in_schema=False)
+def index(request: HttpRequest):
+    user = current_session(request)
+    return RedirectResponse(("/admin" if user["role"] == "admin" else "/home") if user else "/login", status_code=303)
+
+
+@app.get("/admin/login", include_in_schema=False)
+@app.get("/login", include_in_schema=False)
+@app.get("/register", include_in_schema=False)
+def auth_page(request: HttpRequest):
+    user = current_session(request)
+    if user:
+        return RedirectResponse("/admin" if user["role"] == "admin" else "/home", status_code=303)
+    return FileResponse(ROOT / "app" / "templates" / "auth.html")
+
+
+@app.get("/admin", include_in_schema=False)
+def admin_page(request: HttpRequest):
+    user = current_session(request)
+    if not user:
+        return RedirectResponse("/admin/login", status_code=303)
+    if user["role"] != "admin":
+        raise HTTPException(403, "Administrator access is required.")
+    return FileResponse(ROOT / "app/templates/admin.html")
+
+
+@app.get("/profile", include_in_schema=False)
+def profile_page(request: HttpRequest):
+    if not current_session(request):
+        return RedirectResponse("/login", status_code=303)
+    return FileResponse(ROOT / "app/templates/profile.html")
+
+
+@app.get("/home", include_in_schema=False)
+def home(request: HttpRequest):
+    user = current_session(request)
+    if user and user["role"] == "admin":
+        return RedirectResponse("/admin", status_code=303)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    return FileResponse(ROOT / "app" / "templates" / "home.html")
+
+
+@app.get("/api/assessments/latest")
+def latest_assessment(user=Depends(require_user)):
+    with database() as db:
+        row = db.execute(
+            "SELECT result_json, completed_at FROM latest_assessments WHERE user_id = ?",
+            (user["id"],),
+        ).fetchone()
+    return {"assessment": {
+        "result": json.loads(row["result_json"]), "completed_at": row["completed_at"]
+    } if row else None}
+
+
+@app.get("/assessment", include_in_schema=False)
+def assessment(request: HttpRequest):
+    if not current_session(request):
+        return RedirectResponse("/login", status_code=303)
+    return FileResponse(ROOT / "app" / "templates" / "index.html")
+
+
+@app.get("/static/index.html", include_in_schema=False)
+def legacy_index():
+    return RedirectResponse("/", status_code=303)
+
+
 app.mount("/static", StaticFiles(directory=ROOT / "app" / "static"), name="static")
 
 
-@app.get("/")
-def index():
-    return FileResponse(ROOT / "app" / "static" / "index.html")
-
-
 @app.post("/api/recommend")
-def api_recommend(req: Request):
-    return recommend(req.questionnaire.model_dump(), req.preferences.model_dump())
+def api_recommend(req: Request, user=Depends(require_csrf)):
+    result = recommend(req.questionnaire.model_dump(), req.preferences.model_dump(), plan_config=prediction_catalog())
+    with database() as db:
+        db.execute(
+            """INSERT INTO latest_assessments (user_id, result_json, completed_at)
+               VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
+               result_json = excluded.result_json, completed_at = excluded.completed_at""",
+            (user["id"], json.dumps(result), datetime.now(timezone.utc).isoformat()),
+        )
+    return result
 
 
 @app.get("/api/plans")
-def api_plans():
-    return pd.read_csv(ROOT / "data" / "plans.csv").fillna("").to_dict(orient="records")
+def api_plans(user=Depends(require_user)):
+    return catalog_snapshot()[1]
 
 
 @app.get("/api/model-performance")
-def api_metrics():
+def api_metrics(user=Depends(require_user)):
     m = json.loads((ROOT / "reports" / "metrics.json").read_text())
     keep = ["label", "dataset", "selected_model", "test_roc_auc", "test_pr_auc", "test_brier_calibrated",
             "brier_no_skill", "n_train", "n_test"]
